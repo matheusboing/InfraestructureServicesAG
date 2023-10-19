@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~ng-zorro-antd/ng-zorro-antd.min.css";
+
+body {
+    padding: 0px;
+    margin: 0px;
+
+    .button { 
+        background-color: #000;
+        color: #fff;
+        border: 8px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+}

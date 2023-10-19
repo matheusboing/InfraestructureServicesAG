@@ -1,0 +1,29 @@
+<table nz-table>
+    <thead nz-thead>
+        <tr nz-tr>
+          <th nz-th>Nome da impressora</th>
+          <th nz-th>Modelo da impressora</th>
+          <th nz-th>Localização</th>
+          <th nz-th>Tipo de conexão</th>
+          <th nz-th>Pessoa responsável pela instalação</th>
+          <th nz-th>Data da instalação</th>
+          <th nz-th></th>
+        </tr>
+      </thead>
+    <tbody nz-tbody>
+      <tr nz-tr *ngFor="let request of requests">
+        <td nz-td>{{ request.printerName }}</td>
+        <td nz-td>{{ request.printerModel }}</td>
+        <td nz-td>{{ request.location }}</td>
+        <td nz-td>{{ request.typeOfConnection }}</td>
+        <td nz-td>{{ request.personResponsableForInstallation }}</td>
+        <!-- <td nz-td>{{ request.installationDate }}</td> -->
+        <td nz-td>{{ formatDate(request.installationDate) }}</td>
+        <td nz-td><button nz-button (click)="editRequest(request)">Editar solicitação</button></td>
+      </tr>
+    </tbody>
+</table>
+
+<button nz-button (click)="initNewRequest()">Nova solicitação</button>
+
+<app-edit-printer-installation [request]="request" (requestUpdated)="ngOnInit()"></app-edit-printer-installation>

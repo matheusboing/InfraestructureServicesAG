@@ -1,0 +1,7 @@
+<div *ngIf="request">
+    <h2>{{ request.printerName }}</h2>
+    <formly-form [model]="request" [fields]="fields" [options]="options" [form]="form"></formly-form>
+    <button (click)="updateRequest(request)" *ngIf="request.id">Salvar</button>
+    <button (click)="deleteRequest(request)" *ngIf="request.id">Deletar</button>
+    <button (click)="createRequest(request)" *ngIf="!request.id">Criar</button>
+</div>
