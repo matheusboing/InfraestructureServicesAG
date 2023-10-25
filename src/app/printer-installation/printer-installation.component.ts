@@ -1,8 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, NgZone, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { PrinterInstallation } from '../models/requests-for-printer-installation';
 import { PrinterInstallationService } from '../printer-installation.service';
-import { DatePipe } from '@angular/common';
+import { EditPrinterInstallationComponent } from 'src/app/edit-printer-installation/edit-printer-installation/edit-printer-installation.component'
+import { EditPrinterInstallationService } from '../edit-printer-installation/edit-printer-installation/service/edit-printer-installation-service';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-printer-installation',
@@ -14,8 +16,16 @@ export class PrinterInstallationComponent implements OnInit{
   title = 'InfrastructureServicesAG';
   requests: PrinterInstallation[] = [];
   request?: PrinterInstallation;
+  isVisibleEditModal = false;
+  isVisibleCreateModal = false;
+  isOkLoading = false;
 
-  constructor(private authService: AuthService, private printerInstallationService: PrinterInstallationService, private datePipe: DatePipe){
+  constructor(
+    private authService: AuthService,
+    private printerInstallationService: PrinterInstallationService,
+    private editPrinterInstallationService: EditPrinterInstallationService,
+    private modalService: NzModalService,
+    ){
   }
 
   ngOnInit(): void {
@@ -26,25 +36,80 @@ export class PrinterInstallationComponent implements OnInit{
   }
 
   formatDate(date: any) {
-    if (!date) {
-      return '';
-    }
-
-    // const parseDate = new Date(date);
-
-    // if (isNaN(parseDate.getTime())) {
-    //   return date;
-    // }
-  
-    return this.datePipe.transform(date, 'dd-MM-yyyy');
+    this.printerInstallationService.formatDate(date);
   }
 
-  initNewRequest(){
+  showModalCreate(){
     this.request = new PrinterInstallation();
+    this.isVisibleCreateModal = true;
+  }
+  
+  showModalEdit(request: PrinterInstallation) {
+    this.request = request;
+    this.isVisibleEditModal = true;
   }
 
-  editRequest(request: PrinterInstallation) {
-    this.request = request;
+  showDeleteConfirm(request: PrinterInstallation): void {
+    this.modalService.confirm({
+      nzTitle: 'Are you sure delete this task?',
+      nzContent: '<b style="color: red;">Some descriptions</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => { 
+        this.deleteRequest(request)
+        setTimeout(() => {
+          this.ngOnInit()
+          this.isOkLoading = false;
+        }, 500);
+      },
+      nzCancelText: 'No',
+      nzOnCancel: () => console.log('Cancel'),
+    });
+  }
+
+  handleCancel(): void {
+    this.isVisibleEditModal = false;
+    this.isVisibleCreateModal = false;
+  }
+    
+  deleteRequest(request: PrinterInstallation){
+    this.editPrinterInstallationService.deleteRequest(request)
+  }
+  
+  createRequest(request: PrinterInstallation){
+    this.editPrinterInstallationService.createRequest(request)
+    this.ngOnInit()
+
+    this.isOkLoading = true;
+    setTimeout(() => {
+      this.isVisibleCreateModal = false;
+      this.isOkLoading = false;
+    }, 100);
+
+    this.success();
+  }
+
+  updateRequest(request: PrinterInstallation){
+    this.editPrinterInstallationService.updateRequest(request)
+
+    this.isOkLoading = true;
+    setTimeout(() => {
+      this.isVisibleEditModal = false;
+      this.isOkLoading = false;
+    }, 100);
+
+    this.success();
+  }
+
+  success(): void {
+    const modal = this.modalService.success({
+      nzTitle: 'Feito!',
+      nzContent: 'A sua requisição foi atualizada com sucesso!',
+      nzOnOk: () => {}
+    });
+
+    setTimeout(() => modal.destroy(), 1800);
   }
 
   logout(){

@@ -1,24 +1,32 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, NgZone } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { AuthService } from 'src/app/auth.service';
 import { PrinterInstallation } from 'src/app/models/requests-for-printer-installation';
 import { PrinterInstallationService } from 'src/app/printer-installation.service';
 import { PrinterInstallationComponent } from 'src/app/printer-installation/printer-installation.component'
+import { EditPrinterInstallationService } from './service/edit-printer-installation-service';
+import { AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-edit-printer-installation',
   templateUrl: './edit-printer-installation.component.html',
-  styleUrls: ['./edit-printer-installation.component.scss']
+  styleUrls: ['./edit-printer-installation.component.scss'],
 })
-export class EditPrinterInstallationComponent implements OnInit{
+export class EditPrinterInstallationComponent implements AfterViewInit{
   form = new FormGroup({});
   model: any = {};
   options: FormlyFormOptions = {};
+  isVisible = false;
+  isOkLoading = false;
   @Input() request?: PrinterInstallation;
   @Output() requestUpdated = new EventEmitter<PrinterInstallation>();
 
-  constructor(private printerInstallationService: PrinterInstallationService, private printerInstallationComponent: PrinterInstallationComponent){}
+  constructor(
+    // private printerInstallationService: PrinterInstallationService,
+    private printerInstallationComponent: PrinterInstallationComponent,
+    private editPrinterInstallationService: EditPrinterInstallationService,
+    ){}
 
   fields: FormlyFieldConfig[] = [
     {
@@ -84,27 +92,28 @@ export class EditPrinterInstallationComponent implements OnInit{
     },
   ]
   
-  ngOnInit(): void {}
-  
+  ngAfterViewInit() {
+    // Initialize the form and fields here
+    this.form = new FormGroup({});
+  }
+
   updateRequest(request: PrinterInstallation){
-    this.printerInstallationService
-      .updateRequest(request)
-      .subscribe((request: PrinterInstallation) => this.requestUpdated.emit(request))
+   this.editPrinterInstallationService.updateRequest(request);
   }
 
   deleteRequest(request: PrinterInstallation){
-    this.printerInstallationService
-      .deleteRequest(request)
-      .subscribe((request: PrinterInstallation) => this.requestUpdated.emit(request))
+    this.editPrinterInstallationService.deleteRequest(request);
   }
 
   createRequest(request: PrinterInstallation){
-    this.printerInstallationService
-      .createRequest(request)
-      .subscribe((request: PrinterInstallation) => this.requestUpdated.emit(request))
+    this.editPrinterInstallationService.createRequest(request);
   }
 
-  submit() {
-    alert(JSON.stringify(this.model));
+  onSubmit() {
+    if (this.form.valid) {
+      // Handle form submission here
+      console.log(this.form.value);
+      console.log(this.model);
+    }
   }
 }

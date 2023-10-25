@@ -15,7 +15,9 @@ import { FormlyModule } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n'
 
 
 @NgModule({
@@ -36,10 +38,12 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
     NzTableModule,
     NzModalModule,
     BrowserAnimationsModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    NzButtonModule
   ],
   providers: [
     DatePipe,
+    { provide: NZ_I18N, useValue: en_US },
   ],
   bootstrap: [AppComponent]
 })

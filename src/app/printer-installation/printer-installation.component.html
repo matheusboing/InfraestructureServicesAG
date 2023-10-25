@@ -1,29 +1,71 @@
-<table nz-table>
-    <thead nz-thead>
-        <tr nz-tr>
-          <th nz-th>Nome da impressora</th>
-          <th nz-th>Modelo da impressora</th>
-          <th nz-th>Localização</th>
-          <th nz-th>Tipo de conexão</th>
-          <th nz-th>Pessoa responsável pela instalação</th>
-          <th nz-th>Data da instalação</th>
-          <th nz-th></th>
+<nz-table 
+    #borderedTable nzBordered 
+    nzTitle="Requisições"
+    #smallTable nzSize="small"
+    [nzPageSize]="1"
+    [nzFrontPagination]="true">
+    <thead>
+        <tr>
+          <th>Nome da impressora</th>
+          <th>Modelo da impressora</th>
+          <th>Localização</th>
+          <th>Tipo de conexão</th>
+          <th>Pessoa responsável pela instalação</th>
+          <th>Data da instalação</th>
+          <th></th>
         </tr>
       </thead>
-    <tbody nz-tbody>
-      <tr nz-tr *ngFor="let request of requests">
-        <td nz-td>{{ request.printerName }}</td>
-        <td nz-td>{{ request.printerModel }}</td>
-        <td nz-td>{{ request.location }}</td>
-        <td nz-td>{{ request.typeOfConnection }}</td>
-        <td nz-td>{{ request.personResponsableForInstallation }}</td>
-        <!-- <td nz-td>{{ request.installationDate }}</td> -->
-        <td nz-td>{{ formatDate(request.installationDate) }}</td>
-        <td nz-td><button nz-button (click)="editRequest(request)">Editar solicitação</button></td>
+    <tbody>
+      <tr *ngFor="let request of requests">
+        <td>{{ request.printerName }}</td>
+        <td>{{ request.printerModel }}</td>
+        <td>{{ request.location }}</td>
+        <td>{{ request.typeOfConnection }}</td>
+        <td>{{ request.personResponsableForInstallation }}</td>
+        <!-- <td>{{ request.installationDate }}</td> -->
+        <td>{{ formatDate(request.installationDate) }}</td>
+        <td>
+          <button nz-button nzType="primary" Theme="outline" (click)="showModalEdit(request)">Editar</button>
+          <button nz-button nzType="dashed" (click)="showDeleteConfirm(request)">Delete</button>
+        </td>
       </tr>
     </tbody>
-</table>
+</nz-table>
 
-<button nz-button (click)="initNewRequest()">Nova solicitação</button>
+<button nz-button (click)="showModalCreate()">Nova solicitação</button>
 
-<app-edit-printer-installation [request]="request" (requestUpdated)="ngOnInit()"></app-edit-printer-installation>
+<nz-modal
+  [(nzVisible)]="isVisibleEditModal"
+  [nzOkText]="'Salvar'"
+  [nzCancelText]="'Cancelar'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="request && updateRequest(request)"
+  [nzTitle]="'Form in Modal'"
+  >
+  <app-edit-printer-installation
+    *nzModalContent
+    [request]="request"
+    (requestUpdated)="ngOnInit()">
+  </app-edit-printer-installation>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="isVisibleCreateModal"
+  [nzOkText]="'Salvar'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="request && createRequest(request)"
+  [nzTitle]="'Criar solicitação'" 
+  >
+  <app-edit-printer-installation
+    *nzModalContent
+    [request]="request"
+    (requestUpdated)="ngOnInit()"
+  >
+  </app-edit-printer-installation>
+</nz-modal>
+    
+    <!-- <ng-template #nzFooter *ngIf="request">
+      <button nz-button nzType="'primary'" *ngIf="request.id" (click)="updateRequest(request)">Salvar</button>
+      <button nz-button (click)="deleteRequest(request)" *ngIf="request.id">Deletar</button>
+      <button nz-button (click)="createRequest(request)" *ngIf="!request.id">Criar</button>
+    </ng-template> -->
