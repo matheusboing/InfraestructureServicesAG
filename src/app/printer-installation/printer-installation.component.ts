@@ -51,8 +51,8 @@ export class PrinterInstallationComponent implements OnInit{
 
   showDeleteConfirm(request: PrinterInstallation): void {
     this.modalService.confirm({
-      nzTitle: 'Are you sure delete this task?',
-      nzContent: '<b style="color: red;">Some descriptions</b>',
+      nzTitle: 'Você tem certeza que deseja excluir essa requisição?',
+      nzContent: `<b style="color: red;"></br>Nome: ${request.printerName}</br>Local: ${request.location}</b>`,
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
@@ -61,7 +61,7 @@ export class PrinterInstallationComponent implements OnInit{
         setTimeout(() => {
           this.ngOnInit()
           this.isOkLoading = false;
-        }, 500);
+        }, 100);
       },
       nzCancelText: 'No',
       nzOnCancel: () => console.log('Cancel'),

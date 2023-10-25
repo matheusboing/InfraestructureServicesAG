@@ -23,7 +23,6 @@ export class EditPrinterInstallationComponent implements AfterViewInit{
   @Output() requestUpdated = new EventEmitter<PrinterInstallation>();
 
   constructor(
-    // private printerInstallationService: PrinterInstallationService,
     private printerInstallationComponent: PrinterInstallationComponent,
     private editPrinterInstallationService: EditPrinterInstallationService,
     ){}

@@ -26,13 +26,13 @@
         <td>{{ formatDate(request.installationDate) }}</td>
         <td>
           <button nz-button nzType="primary" Theme="outline" (click)="showModalEdit(request)">Editar</button>
-          <button nz-button nzType="dashed" (click)="showDeleteConfirm(request)">Delete</button>
+          <button nz-button nzType="dashed" (click)="showDeleteConfirm(request)">Deletar</button>
         </td>
       </tr>
     </tbody>
 </nz-table>
 
-<button nz-button (click)="showModalCreate()">Nova solicitação</button>
+<button nz-button (click)="showModalCreate()">Nova requisição</button>
 
 <nz-modal
   [(nzVisible)]="isVisibleEditModal"
@@ -40,7 +40,7 @@
   [nzCancelText]="'Cancelar'"
   (nzOnCancel)="handleCancel()"
   (nzOnOk)="request && updateRequest(request)"
-  [nzTitle]="'Form in Modal'"
+  [nzTitle]="'Editar Solicitação'"
   >
   <app-edit-printer-installation
     *nzModalContent
@@ -63,9 +63,3 @@
   >
   </app-edit-printer-installation>
 </nz-modal>
-    
-    <!-- <ng-template #nzFooter *ngIf="request">
-      <button nz-button nzType="'primary'" *ngIf="request.id" (click)="updateRequest(request)">Salvar</button>
-      <button nz-button (click)="deleteRequest(request)" *ngIf="request.id">Deletar</button>
-      <button nz-button (click)="createRequest(request)" *ngIf="!request.id">Criar</button>
-    </ng-template> -->

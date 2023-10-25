@@ -1,10 +1,6 @@
 <div *ngIf="request">
   <form [formGroup]="form" (submit)="onSubmit()">
-    <!-- <h2>{{ request.printerName }}</h2> -->
     <formly-form [form]="form" [fields]="fields" [options]="options" [model]="request"></formly-form>
-    <!-- <button nz-button (click)="updateRequest(request)" *ngIf="request.id">Salvar</button>
-    <button nz-button (click)="deleteRequest(request)" *ngIf="request.id">Deletar</button>
-    <button nz-button (click)="createRequest(request)" *ngIf="!request.id">Criar</button> -->
   </form>
 </div>
 
